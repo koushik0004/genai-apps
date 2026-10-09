@@ -1,0 +1,8 @@
+pyproject.toml
+genai_apps.egg-info/PKG-INFO
+genai_apps.egg-info/SOURCES.txt
+genai_apps.egg-info/dependency_links.txt
+genai_apps.egg-info/requires.txt
+genai_apps.egg-info/top_level.txt
+lib/__init__.py
+lib/utility.py

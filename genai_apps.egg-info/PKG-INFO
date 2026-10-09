@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: genai-apps
+Version: 0.1.0
+Summary: Small GenAI applications organized by chapters
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: openai>=1.0.0
+Requires-Dist: requests>=2.31.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: ipython>=8.18.1
+Requires-Dist: streamlit>=1.50.0

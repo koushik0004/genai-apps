@@ -1,0 +1,26 @@
+# lib/__init__.py
+from .utility import (
+    client,
+    timer,
+    MODEL_DEFAULT,
+    QWEN_MODEL,
+    OPEN_ROUTER_MODEL,
+    OPEN_ROUTER_OSS_MODEL,
+    OPENAI_NANO_MODEL,
+    ANTHROPIC_HAIKU_MODEL,
+    MISTRAL_NEMO_MODEL,
+    DEEPSEEK_V4_FLASH_MODEL,
+)
+
+__all__ = [
+    "client",
+    "timer",
+    "MODEL_DEFAULT",
+    "QWEN_MODEL",
+    "OPEN_ROUTER_MODEL",
+    "OPEN_ROUTER_OSS_MODEL",
+    OPENAI_NANO_MODEL,
+    ANTHROPIC_HAIKU_MODEL,
+    MISTRAL_NEMO_MODEL,
+    DEEPSEEK_V4_FLASH_MODEL,
+]
