@@ -1,3 +1,5 @@
+LICENSE
+README.md
 pyproject.toml
 genai_apps.egg-info/PKG-INFO
 genai_apps.egg-info/SOURCES.txt
