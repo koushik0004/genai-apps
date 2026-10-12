@@ -33,10 +33,27 @@ def conversion_rate(payload):
     print(f"Converted Amount: {converted_amount}, Exchange Rate: {exchange_rate}")
     return f"{amount} {from_currency} is equivalent to {converted_amount} {to_currency} - with the exchange rate of {exchange_rate}."
 
+def system_command(command):
+    # Depricated code
+    # import os
+    # resp = os.system(command)
+    # return resp
+
+    import subprocess
+    # simple stuff
+    # result = subprocess.run(cmd, shell=True)
+    # resp = result.returncode
+    # return resp
+    try:
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return result.stdout.decode('utf-8').strip()
+    except subprocess.CalledProcessError as e:
+        return f"Error executing command: {e.stderr.decode('utf-8').strip()}"
+
 AVAIABLE_TOOLS_MAP = {
     'get_weather': get_weather,
     'conversion_rate': conversion_rate,
-    # 'systemCommand': systemCommand
+    'system_command': system_command
 }
 # SYSTEM_PROMPT = f"""
 #     You are a helpful AI expert who solves user queries.
@@ -81,6 +98,7 @@ SYSTEM_PROMPT = """
    Available Tools:
    - "get_weather": Accepts the place name as input and return the current weather of that location
    - "conversion_rate": Accept {amount, from_currency, to_currency} as an input and returns the conversion result as output
+   - "system_command": Accept linux command as input and runs the command
 
    Example:
    User: What is the weather of Delhi?
