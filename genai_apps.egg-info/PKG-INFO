@@ -4,9 +4,14 @@ Version: 0.1.0
 Summary: Small GenAI applications organized by chapters
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
+License-File: LICENSE
 Requires-Dist: python-dotenv>=1.0.0
 Requires-Dist: openai>=1.0.0
 Requires-Dist: requests>=2.31.0
 Requires-Dist: rich>=13.0.0
 Requires-Dist: ipython>=8.18.1
 Requires-Dist: streamlit>=1.50.0
+Dynamic: license-file
+
+# genai-apps
+Multiple small gen ai apps getting created and practiced

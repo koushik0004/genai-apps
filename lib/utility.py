@@ -15,6 +15,7 @@ api_key = os.getenv("OPENROUTER_API_KEY")
 
 # 3. Extract Model Names from .env
 MODEL_DEFAULT = os.getenv("MODEL_DEFAULT", "google/gemini-2.5-flash")
+GEMINI_GEMMA_MODEL = os.getenv("GEMINI_GEMMA_MODEL", "google/gemma-4-31b-it")
 QWEN_MODEL = os.getenv("QWEN_MODEL", "qwen/qwen3.7-flash")
 OPEN_ROUTER_MODEL = os.getenv("OPEN_ROUTER_MODEL", "openai/gpt-4o-mini")
 OPEN_ROUTER_OSS_MODEL = os.getenv("OPEN_ROUTER_OSS_MODEL", "openai/gpt-oss-120b")
