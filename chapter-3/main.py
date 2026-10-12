@@ -121,32 +121,32 @@ while True:
         exit()
 
     messages.append({"role": "user", "content": user_input})
-    
-    while True:
-        response = client.chat.completions.create(
-                    model=GEMINI_GEMMA_MODEL,
-                    messages=messages,
-                    response_format={"type": "json_object"}
-                )
-        resp = json.loads(response.choices[0].message.content)
-        messages.append({"role": "assistant", "content": json.dumps(resp)})
+    with timer(description="OpenRouter API call"):
+        while True:
+            response = client.chat.completions.create(
+                        model=GEMINI_GEMMA_MODEL,
+                        messages=messages,
+                        response_format={"type": "json_object"}
+                    )
+            resp = json.loads(response.choices[0].message.content)
+            messages.append({"role": "assistant", "content": json.dumps(resp)})
 
-        if resp['step'] == 'Action':
-            tool_name = resp['tool']
-            tool_input = resp['input']
-            print(f"🪓 Tool = {tool_name} and Input = {tool_input}")
+            if resp['step'] == 'Action':
+                tool_name = resp['tool']
+                tool_input = resp['input']
+                print(f"🪓 Tool = {tool_name} and Input = {tool_input}")
 
-            if tool_name in AVAIABLE_TOOLS_MAP:
-                tool_resp = AVAIABLE_TOOLS_MAP[tool_name](tool_input)
-                messages.append({"role": "assistant", "content": json.dumps({"step": "Observe", "content": tool_resp })})
-                print(f"🪜 Observe: {tool_resp} ")
-                continue
+                if tool_name in AVAIABLE_TOOLS_MAP:
+                    tool_resp = AVAIABLE_TOOLS_MAP[tool_name](tool_input)
+                    messages.append({"role": "assistant", "content": json.dumps({"step": "Observe", "content": tool_resp })})
+                    print(f"🪜 Observe: {tool_resp} ")
+                    continue
 
-        if resp['step'] == 'Result':
-            print(f"🤖 {resp['step']}: {resp['output']} ")
-            break
+            if resp['step'] == 'Result':
+                print(f"🤖 {resp['step']}: {resp['output']} ")
+                break
 
-        print(f"🪜 {resp['step']}: {resp['content']} ")
+            print(f"🪜 {resp['step']}: {resp['content']} ")
 
     # console.print(RichMarkdown(response.choices[0].message.content))
     
