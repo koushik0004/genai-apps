@@ -5,7 +5,7 @@ from rich.markdown import Markdown as RichMarkdown
 from rich.json import JSON as RichJSON
 import json
 # One-stop clean import
-from lib import client, get_current_weather, timer, OPEN_ROUTER_OSS_MODEL, OPEN_ROUTER_MODEL, GEMINI_GEMMA_MODEL
+from lib import client, get_current_weather, get_converted_currency, timer, OPEN_ROUTER_OSS_MODEL, OPEN_ROUTER_MODEL, GEMINI_GEMMA_MODEL
 
 console = Console()
 
@@ -13,9 +13,29 @@ def get_weather(place="Bengaluru"):
     weather = get_current_weather(place, country_code="IN")
     return f"The current weather in {weather['city']} is {weather['temperature_c']}°C and {weather['condition']}."
 
+def conversion_rate(payload):
+    # values_list = list(payload.values())
+    # print(json.dumps(payload, indent=4), values_list)
+    # # prints
+    # # {
+    # # "amount": 200,
+    # # "from_currency": "INR",
+    # # "to_currency": "GBP"
+    # # } 
+    # # [200, 'INR', 'GBP']
+    # result = get_converted_currency(*values_list)  
+    amount = payload["amount"]
+    from_currency = payload["from_currency"]
+    to_currency = payload["to_currency"]                                                     
+    result = get_converted_currency(amount, from_currency, to_currency)                                                       
+    converted_amount = result["converted_amount"]                                                                             
+    exchange_rate = result["exchange_rate"]
+    print(f"Converted Amount: {converted_amount}, Exchange Rate: {exchange_rate}")
+    return f"{amount} {from_currency} is equivalent to {converted_amount} {to_currency} - with the exchange rate of {exchange_rate}."
+
 AVAIABLE_TOOLS_MAP = {
     'get_weather': get_weather,
-    # 'conversionRate': conversionRate,
+    'conversion_rate': conversion_rate,
     # 'systemCommand': systemCommand
 }
 # SYSTEM_PROMPT = f"""
@@ -60,6 +80,7 @@ SYSTEM_PROMPT = """
 
    Available Tools:
    - "get_weather": Accepts the place name as input and return the current weather of that location
+   - "conversion_rate": Accept {amount, from_currency, to_currency} as an input and returns the conversion result as output
 
    Example:
    User: What is the weather of Delhi?
@@ -86,7 +107,8 @@ while True:
     while True:
         response = client.chat.completions.create(
                     model=GEMINI_GEMMA_MODEL,
-                    messages=messages
+                    messages=messages,
+                    response_format={"type": "json_object"}
                 )
         resp = json.loads(response.choices[0].message.content)
         messages.append({"role": "assistant", "content": json.dumps(resp)})
