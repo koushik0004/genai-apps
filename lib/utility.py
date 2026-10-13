@@ -24,6 +24,9 @@ ANTHROPIC_HAIKU_MODEL = os.getenv("ANTHROPIC_HAIKU_MODEL", "anthropic/claude-hai
 MISTRAL_NEMO_MODEL = os.getenv("MISTRAL_NEMO_MODEL", "mistralai/mistral-nemo")
 DEEPSEEK_V4_FLASH_MODEL = os.getenv("DEEPSEEK_V4_FLASH_MODEL", "deepseek/deepseek-v4-flash-0731")
 
+# text embedding model
+TEXT_EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_MODEL", "text-embedding-3-large")
+
 # 4. Instantiate shared client
 client = OpenAI(
     base_url=base_url,
