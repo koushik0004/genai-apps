@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # --------------------------------------------------------
+  # 1. NoSQL / Document DB: MongoDB + Mongo Express UI
+  # --------------------------------------------------------
+  mongodb:
+    image: mongo:latest
+    container_name: local_mongodb
+    restart: always
+    ports:
+      - "27017:27017" # Standard Mongo Port
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: local_mongo_ui
+    restart: always
+    ports:
+      - "9091:8081" # Web UI Port
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH: "false" # Disables UI login requirement
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
+    driver: local
