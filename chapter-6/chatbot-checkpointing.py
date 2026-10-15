@@ -36,8 +36,8 @@ graph_builder.add_edge("chatbot_agent", END)
 
 # Compile
 # graph = graph_builder.compile()
-def compile_for_checkpoining(checkpoinig):
-    return graph_builder.compile(checkpointer=checkpoinig)
+def compile_for_checkpoining(checkpoitnig):
+    return graph_builder.compile(checkpointer=checkpoitnig)
 
 
 if __name__ == "__main__":
@@ -62,7 +62,14 @@ if __name__ == "__main__":
         with timer(description='Open Router API call'):
             # Call Graph or Invoke Graph
             output = graph.invoke(_state, config)
+            structured_output = {
+                "messages": [
+                    {"role": msg.type, "content": msg.content}
+                    for msg in output.get("messages", [])
+                ]
+            }
             # reset state
-            console.print(RichMarkdown(" 🤖 ", output))
+            # console.print(RichMarkdown(f" 🤖 {structured_output}"))
+            console.print(RichMarkdown(f" 🤖 {structured_output['messages'][-1]['content']}"))
 
 
