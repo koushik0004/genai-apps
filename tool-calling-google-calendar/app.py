@@ -15,7 +15,7 @@ The command-line version (calendar_assistant.py) still works too - pick
 whichever you prefer.
 """
 
-import datetime
+from datetime import datetime
 import json
 
 from flask import Flask, render_template, request, jsonify
@@ -37,6 +37,7 @@ def get_service():
     return service
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 def create_calendar_event(title, start_time, end_time, attendees=None):
     """
@@ -82,7 +83,7 @@ def chat():
 
     # Build the message list: instructions, then the recent conversation,
     # then the user's new message.
-    messages = [{"role": "system", "content": get_system_prompt(timezone)}]
+    messages = [{"role": "system", "content": get_system_prompt(timezone, str(datetime.now()))}]
     messages += history[-20:]  # keep only the last 20 turns so the list stays small
     messages.append({"role": "user", "content": user_message})
 
@@ -116,4 +117,8 @@ def chat():
     return jsonify({"reply": reply, "event": event})
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5000)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    # host="0.0.0.0" makes the server accessible inside Docker and across network
+    # debug=True enables auto-reloading whenever python files are modified
+    app.run(debug=True, host="0.0.0.0", port=port)
