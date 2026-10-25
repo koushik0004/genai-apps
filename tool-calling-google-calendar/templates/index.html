@@ -134,6 +134,7 @@
   const msgInput = document.getElementById('msg');
   const sendBtn = document.getElementById('send');
   const refreshBtn = document.getElementById('refresh');
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   // The conversation, kept in the browser. Each turn we send the recent
   // messages back so the AI remembers context (e.g. a date you just gave it).
@@ -213,7 +214,7 @@
     showTyping();
 
     // history holds the previous turns only; the server adds this new one.
-    const payload = { message: text, messages: history };
+    const payload = { message: text, messages: history, timezone: userTimezone };
     try {
       const res = await fetch('/chat', {
         method: 'POST',

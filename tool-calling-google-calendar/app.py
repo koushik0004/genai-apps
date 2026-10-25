@@ -15,11 +15,13 @@ The command-line version (calendar_assistant.py) still works too - pick
 whichever you prefer.
 """
 
+import datetime
 import json
 
 from flask import Flask, render_template, request, jsonify
 
 from authenticate import get_calendar_service
+from utility import get_system_prompt, tools as TOOLS
 from lib import timer, client, GEMINI_GEMMA_MODEL
 
 service = None
@@ -36,7 +38,7 @@ def get_service():
 
 app = Flask(__name__)
 
-def create_calendar_event(title, start_time, end_time):
+def create_calendar_event(title, start_time, end_time, attendees=None):
     """
         Create a real event in your Google Calendar and return its details.
     """
@@ -45,42 +47,22 @@ def create_calendar_event(title, start_time, end_time):
         "start": {"dateTime": start_time},
         "end": {"dateTime": end_time},
     }
+    if attendees:
+        event['attendees'] = [{"email": email.strip()} for email in attendees if email.strip()]
 
-    return get_service().events().insert(calendarId="primary", body=event).execute()
-
-# The one tool the AI is allowed to use (same shape as calendar_assistant.py).
-TOOLS = [
-    {
-        "type": "function",
-        "function": {
-            "name": "create_calendar_event",
-            "description": "Create a Google Calendar event",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "title": {"type": "string"},
-                    "start_time": {
-                        "type": "string",
-                        "description": "ISO 8601 date-time with timezone",
-                    },
-                    "end_time": {
-                        "type": "string",
-                        "description": "ISO 8601 date-time with timezone",
-                    },
-                },
-                "required": ["title", "start_time", "end_time"],
-                "additionalProperties": False,
-            },
-            "strict": True,
-        },
-    }
-]
+    # return get_service().events().insert(calendarId="primary", body=event).execute()
+    return get_service().events().insert(
+        calendarId="primary",
+        body=event,
+        sendUpdates="all" # Sends Google Calendar invite to attendees
+    ).execute()
 
 SYSTEM_PROMPT = (
     "You are a friendly calendar assistant. "
     "When the user asks to schedule something, use the calendar tool. "
     "Convert dates and times to ISO 8601 format with the America/Chicago timezone. "
     "If a needed detail (what, when, or how long) is missing, ask for it in one short question. "
+    "When the user wants to schedule a meeting with someone, ask for or extract their email address so they can be invited as an attendee. Pass attendee emails to the calendar tool."
     "Never guess a missing date or time. Keep your replies short and friendly."
 )
 
@@ -93,13 +75,14 @@ def chat():
     data = request.get_json(silent=True) or {}
     user_message = (data.get("message") or "").strip()
     history = data.get("messages") or []
+    timezone = data.get("timezone") or str(datetime.now().astimezone().tzinfo)
 
     if not user_message:
         return jsonify({"error": "Please type what you'd like to schedule."}), 400
 
     # Build the message list: instructions, then the recent conversation,
     # then the user's new message.
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages = [{"role": "system", "content": get_system_prompt(timezone)}]
     messages += history[-20:]  # keep only the last 20 turns so the list stays small
     messages.append({"role": "user", "content": user_message})
 
