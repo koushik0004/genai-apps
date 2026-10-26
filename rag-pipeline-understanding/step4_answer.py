@@ -22,7 +22,7 @@
 import sys
 
 from lib import client, EMBEDDING_MODEL, OPEN_ROUTER_MODEL, LLM_MAX_TOKENS
-from helpers import get_llm, require_api_key
+from helpers import require_api_key
 from step3_search import TOP_K, load_store, vector_search
 
 DEFAULT_QUESTION = "Can I take a day off to attend my sister's wedding?"

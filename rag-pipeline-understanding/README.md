@@ -203,7 +203,7 @@ The same four steps, as a familiar chat interface — no terminal needed
 after the one-time setup:
 
 ```bash
-streamlit run app.py
+streamlit run app.py --server.port 8500
 ```
 
 then open <http://localhost:8501>. Ask a question, get an answer, and a
