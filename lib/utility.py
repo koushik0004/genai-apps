@@ -27,6 +27,9 @@ DEEPSEEK_V4_FLASH_MODEL = os.getenv("DEEPSEEK_V4_FLASH_MODEL", "deepseek/deepsee
 
 # text embedding model
 TEXT_EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_MODEL", "text-embedding-3-large")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L12-v2")
+
+LLM_MAX_TOKENS=int(os.getenv("LLM_MAX_TOKENS", "2000"))
 
 # 4. Instantiate shared client
 client = OpenAI(

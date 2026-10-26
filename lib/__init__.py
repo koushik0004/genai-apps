@@ -14,7 +14,9 @@ from .utility import (
     ANTHROPIC_HAIKU_MODEL,
     MISTRAL_NEMO_MODEL,
     DEEPSEEK_V4_FLASH_MODEL,
-    TEXT_EMBEDDING_MODEL
+    TEXT_EMBEDDING_MODEL,
+    EMBEDDING_MODEL,
+    LLM_MAX_TOKENS,
 )
 from .weather_api import get_current_weather
 from .currency_converter_api import get_converted_currency
@@ -35,6 +37,8 @@ __all__ = [
     "MISTRAL_NEMO_MODEL",
     "DEEPSEEK_V4_FLASH_MODEL",
     "TEXT_EMBEDDING_MODEL",
+    "EMBEDDING_MODEL",
+    "LLM_MAX_TOKENS",
     "get_current_weather",
     "get_converted_currency"
 ]
