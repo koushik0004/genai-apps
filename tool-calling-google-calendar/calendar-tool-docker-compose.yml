@@ -1,0 +1,25 @@
+services:
+  calendar-assistant:
+    build:
+      context: ..
+      dockerfile: tool-calling-google-calendar/Dockerfile
+    container_name: calendar-assistant-dev
+    ports:
+      - "5001:5000"
+    env_file:
+      - ../.env
+    environment:
+      - FLASK_DEBUG=1
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+      - UV_NO_SYNC=1
+    volumes:
+      # Live volume swap: changes in host files immediately reflect inside container
+      - ..:/app
+      # Keep container virtualenv and cache isolated from host
+      - /app/.venv
+      - /app/tool-calling-google-calendar/.venv
+      - /app/__pycache__
+      - /app/tool-calling-google-calendar/__pycache__
+    working_dir: /app/tool-calling-google-calendar
+    command: uv run python app.py

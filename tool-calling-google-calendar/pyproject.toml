@@ -1,0 +1,16 @@
+[project]
+name = "tool-calling-google-calendar"
+version = "0.1.0"
+description = "Google Calendar Assistant with Tool Calling"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.1.0",
+    "google-api-python-client>=2.160.0",
+    "google-auth>=2.38.0",
+    "google-auth-oauthlib>=1.2.1",
+    "openai>=1.61.0",
+    "python-dotenv>=1.0.1",
+    "rich>=13.9.4",
+    "requests>=2.32.3",
+]
