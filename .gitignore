@@ -228,3 +228,10 @@ __marimo__/
 credentials.json
 token.json
 
+# Local Database storage & mounts
+qdrant_storage/
+neo4j/
+mongo_data/
+**/data/mongo_data/
+
+
